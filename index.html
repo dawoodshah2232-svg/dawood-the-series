@@ -231,6 +231,52 @@ footer{border-top:1px solid var(--line);padding:38px 0;background:var(--bg2)}
 .to-top:hover{background:var(--red);transform:translateY(-4px)}
 .to-top svg{width:18px;height:18px}
 
+/* ---------- floating cursor ---------- */
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:200;border-radius:50%;display:none}
+@media(pointer:fine){
+  .cursor-dot{display:block;width:8px;height:8px;background:var(--red);transform:translate(-50%,-50%)}
+  .cursor-ring{display:block;width:38px;height:38px;border:1.5px solid rgba(229,50,45,.65);transform:translate(-50%,-50%);transition:width .3s var(--ease),height .3s var(--ease),border-color .3s,background .3s}
+  .cursor-ring.grow{width:64px;height:64px;background:rgba(229,50,45,.1);border-color:var(--red)}
+}
+
+/* ---------- ambient video-type background ---------- */
+#dust{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+.hero,.marquee,section,footer{position:relative;z-index:1}
+
+/* ---------- scroll progress ---------- */
+.progress{position:fixed;top:0;left:0;height:3px;width:100%;z-index:120;background:transparent}
+.progress i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--red-deep),var(--red));transform-origin:0 50%;transform:scaleX(0)}
+
+/* ---------- cv band ---------- */
+.cv-band{margin-top:64px;border:1px solid var(--line);border-radius:26px;padding:44px;background:linear-gradient(135deg,rgba(229,50,45,.1),rgba(229,50,45,.02) 55%,transparent),var(--card);display:flex;align-items:center;gap:28px;flex-wrap:wrap;position:relative;overflow:hidden}
+.cv-band::before{content:"CV";position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:9rem;font-weight:900;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.07);pointer-events:none}
+.cv-icon{flex:0 0 68px;width:68px;height:68px;border-radius:20px;background:linear-gradient(135deg,var(--red),var(--red-deep));display:grid;place-items:center;box-shadow:0 14px 34px rgba(229,50,45,.4)}
+.cv-icon svg{width:30px;height:30px;color:#fff}
+.cv-band h3{font-size:1.35rem;font-weight:800;letter-spacing:-.01em}
+.cv-band p{color:var(--muted);font-size:.94rem;max-width:520px;margin-top:6px}
+.cv-band .btn{margin-left:auto}
+
+/* ---------- skills marquee ---------- */
+.skills-marquee{margin-top:44px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.02);overflow:hidden;padding:18px 0}
+.skills-marquee .marquee-track span{font-size:.95rem;font-weight:700;letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:10px 22px;margin:0 8px;background:rgba(255,255,255,.03)}
+.skills-marquee .marquee-track span i{padding-right:0}
+
+/* ---------- showcase collage ---------- */
+.showcase-grid{position:relative;height:660px;max-width:1020px;margin:0 auto}
+.show-main{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-2deg);z-index:3;width:min(320px,64vw);border-radius:26px;overflow:hidden;border:1px solid rgba(255,255,255,.16);box-shadow:0 50px 110px rgba(0,0,0,.7)}
+.show-main img{width:100%;aspect-ratio:3/4;object-fit:cover}
+.show-main figcaption{position:absolute;left:0;right:0;bottom:0;padding:34px 20px 18px;background:linear-gradient(transparent,rgba(0,0,0,.82));font-weight:800;font-size:.95rem}
+.show-main figcaption small{display:block;color:var(--muted);font-weight:600;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase}
+.show-panel{position:absolute;z-index:1;width:min(300px,42vw);border-radius:22px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 70px rgba(0,0,0,.6);transition:transform .5s var(--ease)}
+.show-panel img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top;filter:grayscale(1) contrast(1.06) brightness(.92);display:block}
+.show-panel::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(229,50,45,.28),rgba(10,10,13,.5) 75%);mix-blend-mode:multiply;pointer-events:none}
+.show-panel .pl{position:absolute;left:14px;bottom:12px;z-index:2;font-size:.68rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);padding:7px 13px;border-radius:999px;backdrop-filter:blur(6px)}
+.sp1{top:2%;left:0;transform:rotate(-6deg)}
+.sp2{top:6%;right:0;transform:rotate(5deg)}
+.sp3{bottom:4%;left:2%;transform:rotate(4deg)}
+.sp4{bottom:8%;right:2%;transform:rotate(-5deg)}
+.show-panel:hover{transform:rotate(0) scale(1.05);z-index:4}
+
 /* ---------- responsive ---------- */
 @media(max-width:1020px){
   .svc-grid{grid-template-columns:repeat(2,1fr)}
@@ -261,6 +307,10 @@ footer{border-top:1px solid var(--line);padding:38px 0;background:var(--bg2)}
   .hero-photo{margin-top:-11vw}
   .chip.c1{left:2%}.chip.c2{right:2%}.chip.c4{right:2%}
   .hero-ctas .btn{flex:1 1 auto;justify-content:center}
+  .showcase-grid{height:auto;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+  .show-main{position:relative;left:auto;top:auto;transform:rotate(-2deg);grid-column:1/-1;width:min(320px,78vw);margin:0 auto 8px}
+  .show-panel{position:relative;width:auto;transform:none!important;top:auto;left:auto;right:auto;bottom:auto}
+  .cv-band .btn{margin-left:0;width:100%;justify-content:center}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -271,6 +321,10 @@ footer{border-top:1px solid var(--line);padding:38px 0;background:var(--bg2)}
 </style>
 </head>
 <body>
+<div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+<canvas id="dust" aria-hidden="true"></canvas>
+<div class="cursor-ring" id="cRing" aria-hidden="true"></div>
+<div class="cursor-dot" id="cDot" aria-hidden="true"></div>
 
 <nav class="nav" id="nav" aria-label="Main navigation">
   <div class="nav-inner">
@@ -425,6 +479,11 @@ footer{border-top:1px solid var(--line);padding:38px 0;background:var(--bg2)}
         <div class="tool-chips"><span>Forex Industry</span><span>Mentorship</span><span>Public Speaking</span><span>Content Writing</span><span>Expo Operations</span></div>
       </div>
     </div>
+    <div class="skills-marquee rv" aria-label="All skills">
+      <div class="marquee-track" id="skillsTrack">
+        <span>Graphic Design <i>✦</i></span><span>Branding <i>✦</i></span><span>Event Planning <i>✦</i></span><span>Operations <i>✦</i></span><span>Client Relations <i>✦</i></span><span>Mentorship <i>✦</i></span><span>Public Speaking <i>✦</i></span><span>Content Writing <i>✦</i></span><span>Content Strategy <i>✦</i></span><span>Video Editing <i>✦</i></span><span>Print Media <i>✦</i></span><span>Team Management <i>✦</i></span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -460,6 +519,23 @@ footer{border-top:1px solid var(--line);padding:38px 0;background:var(--bg2)}
         <div class="work-thumb t5"><span class="wt">Code</span><span class="big">&lt;/&gt;</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg></span></div>
         <div class="work-body"><h3>GitHub — Build Log</h3><p>Every project, every commit. The open record of what I ship.</p></div>
       </a>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="showcase">
+  <div class="wrap">
+    <div class="sec-head rv" style="text-align:center;margin-left:auto;margin-right:auto">
+      <span class="eyebrow" style="justify-content:center">In The Field</span>
+      <h2 class="sec-title">Me, <span class="thin">surrounded</span> by my work</h2>
+      <p class="sec-sub" style="margin-left:auto;margin-right:auto">The ventures I design, direct and operate — graded in one palette.</p>
+    </div>
+    <div class="showcase-grid rv">
+      <figure class="show-panel sp1"><img src="shot-pdfedit.jpg" alt="PDFEdit website" loading="lazy" /><span class="pl">PDFEdit</span></figure>
+      <figure class="show-panel sp2"><img src="shot-flexspot.jpg" alt="FlexSpot website" loading="lazy" /><span class="pl">FlexSpot</span></figure>
+      <figure class="show-main"><img src="dawood-dubai.jpg" alt="Dawood Shah in Dubai" loading="lazy" /><figcaption><small>Dubai, UAE</small>Dawood Shah</figcaption></figure>
+      <figure class="show-panel sp3"><img src="shot-catchtheprice.jpg" alt="CatchThePrice website" loading="lazy" /><span class="pl">CatchThePrice</span></figure>
+      <figure class="show-panel sp4"><img src="shot-leadpilot.jpg" alt="LeadPilot AI website" loading="lazy" /><span class="pl">LeadPilot AI</span></figure>
     </div>
   </div>
 </section>
@@ -517,6 +593,12 @@ footer{border-top:1px solid var(--line);padding:38px 0;background:var(--bg2)}
         <h3>BBA (Hons)</h3>
         <p class="org">Peshawar University / City University Peshawar</p>
       </div>
+    </div>
+    <div class="cv-band rv">
+      <span class="cv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></span>
+      <div><h3>My full CV, in website style above — or as a PDF</h3><p>Everything on this page is my real CV, restyled for the web. Prefer the classic format? Download the original PDF.</p></div>
+      <a class="btn btn-red magnetic" href="dawood-shah-cv.pdf" download="Dawood-Shah-CV.pdf">Download CV
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 11l6 6 6-6M4 21h16"/></svg></a>
     </div>
   </div>
 </section>
@@ -624,9 +706,20 @@ footer{border-top:1px solid var(--line);padding:38px 0;background:var(--bg2)}
     if(e.target.tagName === 'A') links.classList.remove('open');
   });
 
-  /* marquee: duplicate track for seamless loop */
+  /* marquee: duplicate tracks for seamless loop */
   var mt = document.getElementById('marqueeTrack');
   mt.innerHTML += mt.innerHTML;
+  var st = document.getElementById('skillsTrack');
+  st.innerHTML += st.innerHTML;
+
+  /* scroll progress */
+  var pbar = document.getElementById('progressBar');
+  function onProgress(){
+    var h = document.documentElement;
+    var p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
+    pbar.style.transform = 'scaleX(' + p + ')';
+  }
+  addEventListener('scroll', onProgress, {passive:true}); onProgress();
 
   /* reveal on scroll */
   var rvEls = document.querySelectorAll('.rv');
@@ -726,6 +819,63 @@ footer{border-top:1px solid var(--line);padding:38px 0;background:var(--bg2)}
       btn.addEventListener('pointerleave', function(){ btn.style.transform = ''; });
     });
   }
+
+  /* floating cursor (desktop only) */
+  if(finePointer && !reduceMotion){
+    var dot = document.getElementById('cDot'), ring = document.getElementById('cRing');
+    var mx = -100, my = -100, rx = -100, ry = -100;
+    addEventListener('pointermove', function(e){
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    }, {passive:true});
+    (function follow(){
+      rx += (mx - rx) * .16; ry += (my - ry) * .16;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(follow);
+    })();
+    document.querySelectorAll('a, button, .tilt, .work-card').forEach(function(el){
+      el.addEventListener('pointerenter', function(){ ring.classList.add('grow'); });
+      el.addEventListener('pointerleave', function(){ ring.classList.remove('grow'); });
+    });
+  }
+
+  /* ambient video-type background: slow drifting particles, low opacity */
+  (function(){
+    if(reduceMotion) return;
+    var cv = document.getElementById('dust'), ctx = cv.getContext('2d');
+    var W, H, ps = [];
+    function size(){
+      W = cv.width = innerWidth; H = cv.height = innerHeight;
+    }
+    size(); addEventListener('resize', size);
+    var N = Math.min(70, Math.floor(innerWidth / 22));
+    for(var i = 0; i < N; i++){
+      ps.push({
+        x: Math.random(), y: Math.random(),
+        r: 1 + Math.random() * 2.6,
+        vx: (Math.random() - .5) * .00022,
+        vy: -(.0001 + Math.random() * .0004),
+        a: .12 + Math.random() * .3,
+        red: Math.random() < .3
+      });
+    }
+    (function draw(){
+      ctx.clearRect(0, 0, W, H);
+      for(var i = 0; i < ps.length; i++){
+        var p = ps[i];
+        p.x += p.vx; p.y += p.vy;
+        if(p.y < -.02){ p.y = 1.02; p.x = Math.random(); }
+        if(p.x < -.02) p.x = 1.02; if(p.x > 1.02) p.x = -.02;
+        var g = ctx.createRadialGradient(p.x*W, p.y*H, 0, p.x*W, p.y*H, p.r*7);
+        var col = p.red ? '229,50,45' : '243,233,214';
+        g.addColorStop(0, 'rgba(' + col + ',' + p.a + ')');
+        g.addColorStop(1, 'rgba(' + col + ',0)');
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(p.x*W, p.y*H, p.r*7, 0, 6.283); ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    })();
+  })();
 
   /* back to top */
   document.getElementById('toTop').addEventListener('click', function(){
