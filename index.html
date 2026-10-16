@@ -104,6 +104,15 @@ section{scroll-margin-top:80px;position:relative}
 .about-photo{position:relative}
 .about-photo img{border-radius:var(--r);aspect-ratio:4/4.5;object-fit:cover;width:100%;box-shadow:var(--shadow)}
 .about-photo::before{content:"";position:absolute;inset:20px -20px -20px 20px;border:2px solid var(--red);border-radius:26px;z-index:-1;opacity:.4}
+/* ---------- 360° spin viewer ---------- */
+.spin-viewer{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/4.5;box-shadow:var(--shadow);cursor:grab;touch-action:pan-y;background:#0a0a10;user-select:none;-webkit-user-select:none}
+.spin-viewer:active{cursor:grabbing}
+.spin-glow{position:absolute;inset:-14%;background:radial-gradient(closest-side,rgba(229,50,45,.16),transparent 70%);filter:blur(30px);pointer-events:none;animation:spinGlow 5s ease-in-out infinite}
+@keyframes spinGlow{0%,100%{opacity:.65}50%{opacity:1}}
+.spin-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+#spinB{opacity:0}
+.spin-hint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);font-size:.66rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:#f3f0e8;background:rgba(12,12,18,.55);border:1px solid var(--line);padding:9px 18px;border-radius:999px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);white-space:nowrap;transition:opacity .5s;pointer-events:none}
+.spin-hint.hide{opacity:0}
 .about-copy p{color:#cfc9bb;margin-bottom:16px;font-size:1.02rem}
 .about-copy p strong{color:var(--ink)}
 .check-list{list-style:none;margin:26px 0 32px;display:grid;gap:14px}
@@ -310,7 +319,12 @@ footer{background:#08080c;color:#fff;padding:40px 0}
   <div class="wrap">
     <div class="about-grid">
       <div class="about-photo rv">
-        <img src="dawood-pro-creative.jpg" alt="Professional portrait of Dawood Shah" loading="lazy" />
+        <div class="spin-viewer" id="spinViewer">
+          <div class="spin-glow"></div>
+          <img class="spin-frame" id="spinA" src="dawood-dark-blend.jpg" alt="Dawood Shah — drag to rotate 360 degrees" draggable="false" />
+          <img class="spin-frame" id="spinB" src="dawood-dark-blend.jpg" alt="" aria-hidden="true" draggable="false" />
+          <div class="spin-hint" id="spinHint">Drag to rotate 360°</div>
+        </div>
       </div>
       <div class="about-copy">
         <div class="rv">
@@ -430,7 +444,7 @@ footer{background:#08080c;color:#fff;padding:40px 0}
         <div class="proj-body"><h3>LeadPilot AI <span class="go">↗</span></h3><p>Autonomous AI sales & marketing employee — product direction and brand.</p></div>
       </a>
       <a class="proj-card rv" href="https://www.facebook.com/WeaversCreation" target="_blank" rel="noopener">
-        <div class="proj-thumb"><img src="dawood-pro-studio.jpg" alt="Dawood Shah — Weavers Creation design portfolio" loading="lazy" /><span class="wt">Design</span></div>
+        <div class="proj-thumb"><img src="dawood-spin-p45.jpg" alt="Dawood Shah — Weavers Creation design portfolio" loading="lazy" /><span class="wt">Design</span></div>
         <div class="proj-body"><h3>Weavers Creation <span class="go">↗</span></h3><p>Brand identities, expo creatives and campaign design — my full design portfolio.</p></div>
       </a>
       <a class="proj-card rv" href="https://github.com/dawoodshah2232-svg" target="_blank" rel="noopener">
@@ -593,6 +607,51 @@ footer{background:#08080c;color:#fff;padding:40px 0}
       requestAnimationFrame(smoothTilt);
     })();
   }
+
+  /* ---- 360° spin viewer: drag to rotate through 5 angle frames ---- */
+  (function(){
+    var viewer = document.getElementById('spinViewer');
+    if(!viewer || reduceMotion) return;
+    var frames = ['dawood-spin-m90.jpg','dawood-spin-m45.jpg','dawood-dark-blend.jpg','dawood-spin-p45.jpg','dawood-spin-p90.jpg'];
+    frames.forEach(function(f){ var im = new Image(); im.src = f; });
+    var A = document.getElementById('spinA'), B = document.getElementById('spinB');
+    var hint = document.getElementById('spinHint');
+    var N = frames.length - 1, pos = 2, target = 2, la = 2, lb = 2;
+    var dragging = false, sx = 0, st = 2, lastTouch = 0;
+    function render(){
+      var c = Math.max(0, Math.min(N, pos));
+      var i0 = Math.floor(c), f = c - i0, i1 = Math.min(N, i0 + 1);
+      if(i0 !== la){ A.src = frames[i0]; la = i0; }
+      if(i1 !== lb){ B.src = frames[i1]; lb = i1; }
+      A.style.opacity = 1 - f;
+      B.style.opacity = f;
+    }
+    function loop(t){
+      if(!dragging && t - lastTouch > 2600){
+        target = 2 + Math.sin(t / 1700) * 2;
+      }
+      pos += (target - pos) * .09;
+      render();
+      requestAnimationFrame(loop);
+    }
+    viewer.addEventListener('pointerdown', function(e){
+      dragging = true; sx = e.clientX; st = target;
+      lastTouch = performance.now();
+      try{ viewer.setPointerCapture(e.pointerId); }catch(err){}
+      if(hint) hint.classList.add('hide');
+    });
+    viewer.addEventListener('pointermove', function(e){
+      if(!dragging) return;
+      var w = viewer.getBoundingClientRect().width || 300;
+      target = Math.max(0, Math.min(N, st + (e.clientX - sx) / (w / 4)));
+      lastTouch = performance.now();
+    });
+    ['pointerup','pointercancel'].forEach(function(ev){
+      viewer.addEventListener(ev, function(){ dragging = false; lastTouch = performance.now(); });
+    });
+    render();
+    requestAnimationFrame(loop);
+  })();
 
   var rvEls = document.querySelectorAll('.rv');
   if('IntersectionObserver' in window && !reduceMotion){
